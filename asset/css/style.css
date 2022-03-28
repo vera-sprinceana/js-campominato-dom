@@ -26,16 +26,19 @@ main{
     flex-wrap: wrap;
 }
 .box{
+    text-align: center;
     width: calc(100% / 10);
     height: calc(100% / 10);
     border:1px solid #11221c ;
 }
 .box2{
+    text-align: center;
     width: calc(100% / 9);
     height: calc(100% / 9);
     border:1px solid #11221c ;
 }
 .box3{
+    text-align: center;
     width: calc(100% / 7);
     height: calc(100% / 7);
     border:1px solid #11221c ;

@@ -16,173 +16,108 @@ con difficoltà 2 => tra 1 e 81
 con difficoltà 3 => tra 1 e 49 */
 let grid=document.getElementById("grid") ;
 let button=document.getElementById("btn")
+
 let difficolta=document.getElementById("difficolta")
 let box=document.createElement("div");
-    //grid.innerHTML="";
+
+grid.innerHTML="";
 button.addEventListener("click", function(){
-    grid.classList.add("cont_grid") ;
+  
+    
     grid.classList.remove("d-none");
     console.log(difficolta.value)
-     
-          
-            
-      let array=[];  
-          for(y=1; y<101; y++){
-             array.push(y);
-                console.log(array)
-            }
-  
-            function shuffle(array){
-                return array.sort(() => Math.random() -0.5)
-             }
-            array=shuffle(array);   
-      // let arrayBombe=[];
-      //         for(x=1; x<101; x++){
-      //             arrayBombe.push(x);
-      //             console.log(arrayBombe)
-      //           }
-      //           function shuffle(arrayBombe){
-      //             return arrayBombe.sort(() =>Math.random() -0.5)
-      //           }
-      //             arrayBombe=shuffle(arrayBombe);
-      // let array16Bombe=[];
-      //      for(arrayBombe=1; arrayBombe<17; arrayBombe++){
-      //          array16Bombe.push(arrayBombe(x))
-      //          console.log(`le bombe array16bombe sono: ${array16Bombe}`) 
-      //         }
-      //         function shuffle(array16Bombe){
-      //           return array16Bombe.sort(() =>Math.random() -0.5)
-      //         }
-      //           array16Bombe=shuffle(array16Bombe);  
+    let numeroCelle;
+    //numeroCelle.addEventListener("click", cellClick );
+    let array=[];
+    let tentativi=[];
+    let numeroBombe=16;
+    let max_tentativi=numeroCelle-numeroBombe;
+    
+    if(difficolta.value=="Easy"){
+      numeroCelle=100;
+    }else if(difficolta.value=="Medium"){
+      numeroCelle=81;
+    }else{
+      numeroCelle=49;
+    }
+    
+    for(y=1; y<numeroCelle +1; y++){
+      array.push(y)
+    }      
+    function shuffle(array){
+      return array.sort(() => Math.random() -0.5);
+    }
+    array=shuffle(array);
+    console.log(array)
       
+    for(let i=1; i<numeroCelle; i++){
+      let grid=document.getElementById("grid") ;
+      let box=document.createElement("div");
+      grid.appendChild(box);
 
-      if(difficolta.value=="Easy"){
-         for(let i=0; i<=100; i++){
-              let grid=document.getElementById("grid") ;
-              let box=document.createElement("div");
-              grid.appendChild(box);
-              box.classList.add("box")
-              box.innerHTML=`${array[i]}`
-              box.addEventListener("click", function(){
-                this.classList.add("bg-blue")
-                console.log(this.innerHTML)
-                // if(arrayBombe.includes(parseInt.this.innerHTML)){
-                //   this.classList.add("bomba")
-                // }else{
-                //   this.classList.add("bg-blue")
-                // }
-             })
-           }  
-        }else if(difficolta.value=="Medium"){
-          for(let i=1; i<=81; i++){
-              let grid=document.getElementById("grid") ;
-              let box2=document.createElement("div");
-              grid.appendChild(box2);
-              box2.classList.add("box2")
-              box2.innerHTML=`${array[i]}`
-              box2.addEventListener("click", function(){
-                this.classList.add("bg-blue")
-                console.log(this.innerHTML)
-                // if(arrayBombe.includes(parseInt.this.innerHTML)){
-                //   this.classList.add("bomba")
-
-                // }else{
-                //   this.classList.add("bg-blue")
-                // }
-              })  
-            }
-        }else{
-          for(let i=1; i<=49; i++){
-              let grid=document.getElementById("grid") ;
-              let box3=document.createElement("div");
-              grid.appendChild(box3);
-              box3.classList.add("box3")
-              box3.innerHTML=`${array[i]}`
-            
-              box3.addEventListener("click", function(){
-                this.classList.add("bg-blue")
-                console.log(this.innerHTML)
-                // if(arrayBombe.includes(parseInt.this.innerHTML)){
-                //   box3.innerHTML=`${arrayBombe[x]}`
-                //   this.classList.add("bomba")
-                // }else{
-                //   this.classList.add("bg-blue")
-                // }
-             }) 
-               
-          }
-        
+      //numero celle
+      if(numeroCelle==100){
+        box.classList.add("box") 
+      }else if(numeroCelle==81){
+        box.classList.add("box2")
+      }else{
+        box.classList.add("box3")
+      }
+      box.innerHTML=`${array[i]}`
+     box.addEventListener("click", function(){
+          this.classList.add("bg-blue")
+          console.log(this.innerHTML)
+          })
+    } 
+    //GENERAZIONE BOMBE
+    let bombe=generateBombe();
+    function generateBombe(){
+      let generateBombe=[];
+      while(generateBombe.length<numeroBombe){
+        let bomb=getRandomInt(1, numeroCelle);
+        if(!generateBombe.includes(bomb)){
+          generateBombe.push(bomb)
         }
-    
+      }
+      generateBombe.sort(function compare(a,b){
+        return a -b;
+      });
+      console.log("il pacchetto bombe è:", generateBombe)
+      return generateBombe;
+    }
 
+    //FUNZIONE AL CLICK SULLA CELLA
+     function cellClick(event){
+       const cellValue=parseInt(this.querySelector("span").textContent,10 );
+       if(!bombe.includes(cellValue)){
+         fineGioco();
+       }else if(!tentativi.includes(cellValue)){
+         this.classList.add("bg-blue")
+         tentativi.push(cellValue);
+         this.removeEventListener("click", cellClick); 
+       }if(tentativi.length ===max_tentativi){
+         fineGioco();
+       }
+     }
+     //funcione endGames
+     function fineGioco(){
+       const squares=document.querySelectorAll(".square");
+       for(let i=1, squaresNumero=squares.length; i<=squaresNumero; i++){
+         let square = squares[i -1];
+         if(!bombe.includes(i)){
+           square.classList.add("bomba")
+        }
+         square.removeEventListener("click", cellClick)
+      }
+      }
 
-
-  // if(difficolta.value=="Easy"){
-  // for(i=1; i<=100; i++){
-  //     console.log(i)   
-  //    let box=document.createElement("div");
-  //     box.classList.add("box");
-  //      grid.appendChild(box);
-
-  //      button.addEventListener("click", 
-  //      function(){
-  //         grid.classList.remove("d-none")
-  //        box.innerHTML=`${array[i]}`
-  //     })
-  //     box.addEventListener("click", function(){
-  //     box.classList.add("bg-blue")
-  //      }) 
-    
-  //  }
-  // }else if(difficolta.value=="Medium"){
-  //     for(i=1; i<=81; i++){
-  //      difficolta.value==`Medium`
-  //     console.log(i)
-  //     let box2=document.createElement("div");
-  //     box2.classList.add("box2");
-  //     grid.appendChild(box2);
-
-  //      button.addEventListener("click", 
-  //     function(){
-  //         grid.classList.remove("d-none")
-  //         box.innerHTML=`${array[i]}`
-  //      })
-  //        box2.addEventListener("click", function(){
-  //      box2.classList.add("bg-blue")
-      
-  //     })
-  //  }
-
-  // }else{
-  // for(i=1; i<=49; i++){
-  //      console.log(i)
-  //     let box3=document.createElement("div");
-  //      box3.classList.add("box3");
-  //     grid.appendChild(box3);
-
-  //      button.addEventListener("click", 
-  //      function(){
-  //          grid.classList.remove("d-none")
-  //          box.innerHTML=`${array[i]}`
-  //     })
-  //     box3.addEventListener("click", function(){
-  //     box3.classList.add("bg-blue")
-    
-  //   })
-    
-  // }
- 
-
-
- 
-   
-    
- 
-     
-
-
-  //})
-
- //}
+    function getRandomInt(min, max) {
+      min = Math.ceil(min) ||0;
+      max = Math.floor(max) || Number.MAX_SAFE_INTEGER;
+      let result= Math.floor(Math.random() * (max - min +1) + min);
+      return result;
+      }
 
 })
+
+
